@@ -1,5 +1,7 @@
 package greyhound;
 
+import greyhound.client.GreyHoundClient;
+import greyhound.model.DriverAssignment;
 import greyhound.service.GreyhoundService;
 import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;
@@ -11,15 +13,19 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @EnableAsync
 @SpringBootApplication
 public class Application {
 
-	private final GreyhoundService greyhoundService;
+	private final GreyHoundClient client;
+	private final GreyhoundService service;
 
-	public Application(final GreyhoundService greyhoundService) {
-		this.greyhoundService = greyhoundService;
+	public Application(final GreyHoundClient client, final GreyhoundService service) {
+		this.client = client;
+		this.service = service;
 	}
 
 	public static void main(String[] args) {
@@ -40,6 +46,13 @@ public class Application {
 	@Async
 	@EventListener
 	public void onReady(ApplicationReadyEvent e) {
-		greyhoundService.process();
+		List<DriverAssignment> assignments = client.getAssignments();
+
+		CompletableFuture.allOf(
+				service.processLocations(assignments),
+				service.processCarriers(assignments)
+		).join();
+
+		service.processDrivers(assignments);
 	}
 }

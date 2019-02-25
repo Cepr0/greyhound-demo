@@ -7,10 +7,10 @@ logging:
       audit: fatal
       resultset: fatal
       connection: fatal
-    org:
-      springframework:
-        web: debug
-        orm: debug
+#    org:
+#      springframework:
+#        web: debug
+#        orm: debug
     greyhound: debug
 
 log4jdbc:
@@ -21,3 +21,17 @@ log4jdbc:
   trim:
     sql:
       extrablanklines: false
+
+spring:
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 100
+          fetch_size: 100
+          batch_versioned_data: true
+    hibernate:
+      ddl-auto: create-drop

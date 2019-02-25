@@ -9,6 +9,9 @@ import javax.persistence.*;
 @Setter
 @ToString
 @EqualsAndHashCode(of = "id")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "drivers")
 public class Driver implements Persistable<Long> {

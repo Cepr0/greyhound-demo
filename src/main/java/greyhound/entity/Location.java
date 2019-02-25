@@ -3,6 +3,7 @@ package greyhound.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "locations")
 @IdClass(Location.PK.class )
-public class Location {
+public class Location implements Persistable<Location.PK> {
 
 	@Id private Long locationId;
 	@Id private String locationName;
@@ -32,6 +33,11 @@ public class Location {
 	public Location(final Long locationId, final String locationName) {
 		this.locationId = locationId;
 		this.locationName = locationName;
+	}
+
+	@Override
+	public boolean isNew() {
+		return true;
 	}
 
 	@Data
