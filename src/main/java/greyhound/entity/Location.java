@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "locations")
 @IdClass(Location.PK.class )
